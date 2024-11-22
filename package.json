@@ -1,0 +1,31 @@
+{
+  "name": "api-promiedos",
+  "version": "1.0.0",
+  "description": "Web scraper para obtener las tabas de posiciones de primera de promiedos.com.ar",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joacogargiulo/api-promiedos.git"
+  },
+  "keywords": [
+    "scraping",
+    "promiedos",
+    "API"
+  ],
+  "author": "Joaco Gargiulo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joacogargiulo/api-promiedos/issues"
+  },
+  "homepage": "https://github.com/joacogargiulo/api-promiedos#readme",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "cheerio": "^1.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.1"
+  }
+}
