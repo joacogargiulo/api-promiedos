@@ -1,6 +1,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const puppeteer = require('puppeteer')
+const puppeteer = require('puppeteer-core')
+const chromium = require('@sparticuz/chromium')
 const url = 'https://www.promiedos.com.ar/primera';
 
 async function getPosiciones(req, res) {
@@ -80,16 +81,10 @@ async function getPartidos(req, res) {
         // Lanzar el navegador
         const browser = await puppeteer.launch({
             headless: true, // Asegura que se ejecute en modo headless
-            args: [
-                '--no-sandbox', 
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage', 
-                '--disable-accelerated-2d-canvas', 
-                '--disable-gpu', 
-                '--no-zygote', 
-                '--single-process'
-            ],
+            executablePath: await chromium.executablePath(),
+            args: chromium.args,
         });
+        
         const page = await browser.newPage();
 
         // Navegar a la página
