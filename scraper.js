@@ -78,7 +78,18 @@ async function getPosiciones(req, res) {
 async function getPartidos(req, res) {
     try {
         // Lanzar el navegador
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            headless: true, // Asegura que se ejecute en modo headless
+            args: [
+                '--no-sandbox', 
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage', 
+                '--disable-accelerated-2d-canvas', 
+                '--disable-gpu', 
+                '--no-zygote', 
+                '--single-process'
+            ],
+        });
         const page = await browser.newPage();
 
         // Navegar a la página
