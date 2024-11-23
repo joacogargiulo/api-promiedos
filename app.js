@@ -13,4 +13,8 @@ app.get('/posiciones', async (req, res) => {
     await scraper.getPosiciones(req, res);
 });
 
+app.get('/partidos', async (req, res) => {
+    await scraper.getPartidos(req, res);
+});
+
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`));

@@ -1,5 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const puppeteer = require('puppeteer')
 const url = 'https://www.promiedos.com.ar/primera';
 
 async function getPosiciones(req, res) {
@@ -74,6 +75,63 @@ async function getPosiciones(req, res) {
     }
 }
 
+async function getPartidos(req, res) {
+    try {
+        // Lanzar el navegador
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+
+        // Navegar a la página
+        await page.goto(url, { waitUntil: 'networkidle2' });
+
+        const partidosTotales = []; // Para almacenar todos los partidos
+
+        for (let i = 1; i <= 27; i++) {
+            const fecha = i
+            // Ejecutar una función en el navegador para cargar los datos
+            await page.evaluate((fecha) => {
+                if (typeof irfecha === 'function') {
+                    irfecha(fecha); 
+                }
+            }, `${fecha}_14`); // Pasar el valor de `i` como argumento
+
+            // Esperar a que los elementos dinámicos se carguen en el DOM
+            await page.waitForSelector('#fixturein table tr', { timeout: 10000 });
+
+            // Extraer los datos requeridos después de que se ejecutó la función
+            const partidos = await page.evaluate((fechaActual) => {
+                const partidos = [];
+                document.querySelectorAll('#fixturein table tr').forEach((row) => {
+                    const hora = row.querySelector('.game-time')?.textContent.trim();
+                    const equipo1 = row.querySelector('.game-t1 .datoequipo[id^="t1_"]')?.textContent.trim();
+                    const equipo2 = row.querySelector('.game-t1 .datoequipo[id^="t2_"]')?.textContent.trim();
+                    
+                    if (hora && equipo1 && equipo2) {
+                        partidos.push({ hora, equipo1, equipo2, fecha: fechaActual });
+                    }
+                });
+                return partidos;
+            }, fecha);
+
+            // Agregar los partidos de la fecha actual a la lista total
+            partidosTotales.push(...partidos);
+        }
+
+        // Cerrar el navegador
+        await browser.close();
+
+        // Devolver los datos como respuesta de la API
+        res.json({ partidos: partidosTotales });
+    } catch (error) {
+        console.error('Error al usar Puppeteer:', error);
+        res.status(500).send('Error al obtener los datos dinámicos');
+    }
+}
+
+
+
+
 module.exports = {
     getPosiciones,
+    getPartidos,
 };
