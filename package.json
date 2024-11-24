@@ -24,12 +24,9 @@
   },
   "homepage": "https://github.com/joacogargiulo/api-promiedos#readme",
   "dependencies": {
-    "@sparticuz/chromium": "^131.0.0",
     "axios": "^1.7.7",
     "cheerio": "^1.0.0",
     "cors": "^2.8.5",
-    "express": "^4.21.1",
-    "puppeteer": "^23.9.0",
-    "puppeteer-core": "^23.9.0"
+    "express": "^4.21.1"
   }
 }
