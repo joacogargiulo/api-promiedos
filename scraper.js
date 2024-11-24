@@ -1,7 +1,5 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const puppeteer = require('puppeteer-core')
-const chromium = require('@sparticuz/chromium')
 const url = 'https://www.promiedos.com.ar/primera';
 
 async function getPosiciones(req, res) {
