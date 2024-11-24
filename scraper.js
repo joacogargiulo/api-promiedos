@@ -76,6 +76,31 @@ async function getPosiciones(req, res) {
     }
 }
 
+async function getFecha(req, res) {
+    try {
+        const response = await axios.get(url);
+        const html = response.data;
+        const $ = cheerio.load(html);
+        $('#fixturein table tr').each((index, element) => {
+            const $row = $(element);
+            
+            const hora = $row.find('.game-time')?.text().trim();
+            const equipo1 = $row.find('.game-t1 .datoequipo[id^="t1_"]').text().trim();
+            const equipo2 = $row.find('.game-t1 .datoequipo[id^="t2_"]').text().trim();
+            
+            if (hora && equipo1 && equipo2) {
+                res.json({equipo1, equipo2})
+                return false
+            }
+        })
+        
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
 async function getPartidos(req, res) {
     try {
         // Lanzar el navegador
@@ -140,4 +165,5 @@ async function getPartidos(req, res) {
 module.exports = {
     getPosiciones,
     getPartidos,
+    getFecha,
 };
