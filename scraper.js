@@ -10,12 +10,14 @@ async function getPosiciones(req, res) {
         const posiciones = {
             tablaPuntosPrimera: [],
             tablaAnual: [],
+            tablaPromedios: []
         };
 
         // Extraer la "Tabla pts Primera" - clase "tablesorter1"
         $('.tablesorter1 tbody tr').each(function () {
             const pos = parseInt($(this).find('td').eq(0).text().trim());
             const equipo = $(this).find('td').eq(1).text().trim();
+            const escudo = $(this).find('td').eq(1).find('img').attr('src');
             const pts = parseInt($(this).find('td').eq(2).text().trim());
             const pj = parseInt($(this).find('td').eq(3).text().trim());
             const pg = parseInt($(this).find('td').eq(4).text().trim());
@@ -28,6 +30,7 @@ async function getPosiciones(req, res) {
             posiciones.tablaPuntosPrimera.push({
                 pos,
                 equipo,
+                escudo,
                 pts,
                 pj,
                 pg,
@@ -43,6 +46,7 @@ async function getPosiciones(req, res) {
         $('.tablesorter5 tbody tr').each(function () {
             const pos = parseInt($(this).find('td').eq(0).text().trim());
             const equipo = $(this).find('td').eq(1).text().trim();
+            const escudo = $(this).find('td').eq(1).find('img').attr('src');
             const pts = parseInt($(this).find('td').eq(2).text().trim());
             const pj = parseInt($(this).find('td').eq(3).text().trim());
             const pg = parseInt($(this).find('td').eq(4).text().trim());
@@ -55,6 +59,7 @@ async function getPosiciones(req, res) {
             posiciones.tablaAnual.push({
                 pos,
                 equipo,
+                escudo,
                 pts,
                 pj,
                 pg,
@@ -65,6 +70,30 @@ async function getPosiciones(req, res) {
                 dif
             });
         });
+
+        $('#promedios tbody tr').each(function () {
+            const pos = parseInt($(this).find('td').eq(0).text().trim());
+            const equipo = $(this).find('td').eq(1).text().trim();
+            const escudo = $(this).find('td').eq(1).find('img').attr('src');
+            const temporada22 = parseInt($(this).find('td').eq(2).text().trim());
+            const temporada23 = parseInt($(this).find('td').eq(3).text().trim());
+            const temporada24 = parseInt($(this).find('td').eq(4).text().trim());
+            const pts = parseInt($(this).find('td').eq(5).text().trim());
+            const pj = parseInt($(this).find('td').eq(6).text().trim());
+            const prom = parseFloat($(this).find('td').eq(7).text().trim());
+
+            posiciones.tablaPromedios.push({
+                pos,
+                equipo,
+                escudo,
+                temporada22,
+                temporada23,
+                temporada24,
+                pts,
+                pj,
+                prom
+            })
+        })
 
         // Retornar las posiciones como respuesta
         res.json(posiciones);
