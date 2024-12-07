@@ -115,12 +115,21 @@ async function getFecha(req, res) {
             const $row = $(element);
             
             const hora = $row.find('.game-time')?.text().trim();
+            const enJuego = $row.find('.game-play')?.text().trim();
             const equipo1 = $row.find('.game-t1 .datoequipo[id^="t1_"]').text().trim();
             const equipo2 = $row.find('.game-t1 .datoequipo[id^="t2_"]').text().trim();
             
             // Guarda el último partido como inválido si no tiene hora
             if (equipo1 && equipo2) {
                 lastInvalidMatch = { equipo1, equipo2 };
+            }
+
+            if (enJuego) {
+                found = true
+                const resultado1 =  $row.find('[id^="r1_1"]').text().trim();
+                const resultado2 =  $row.find('[id^="r2_1"]').text().trim();
+                res.status(201).json({equipo1, equipo2, resultado1, resultado2})
+                return false
             }
 
             // Si se encuentra un partido válido, devuélvelo y marca como encontrado
