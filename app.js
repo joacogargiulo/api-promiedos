@@ -6,7 +6,7 @@ app.use(cors());
 const scraper = require('./scraper');
 
 app.get('/', function (req, res) {
-    res.json('Web scraper para obtener la tablas de posiciones de https://www.promiedos.com.ar/primera ');
+    res.json('Web scraper para obtener datos de https://www.promiedos.com.ar/primera \nPara tablas de posiciones https://api-promiedos.onrender.com/posiciones \nPara último partido: https://api-promiedos.onrender.com/partido');
 });
 
 app.get('/posiciones', async (req, res) => {
