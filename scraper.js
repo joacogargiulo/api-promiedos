@@ -108,8 +108,9 @@ async function getFecha(req, res) {
         const response = await axios.get(url);
         const html = response.data;
         const $ = cheerio.load(html);
-        let found = false;
+        let found
         let lastInvalidMatch = null;
+        const partidosEnJuego = []
 
         $('#fixturein table tr').each((index, element) => {
             const $row = $(element);
@@ -125,20 +126,23 @@ async function getFecha(req, res) {
             }
 
             if (enJuego) {
-                found = true
+                found = 'jugando'
                 const resultado1 =  $row.find('[id^="r1_1"]').text().trim();
                 const resultado2 =  $row.find('[id^="r2_1"]').text().trim();
-                res.status(201).json({equipo1, equipo2, resultado1, resultado2})
-                return false
+                partidosEnJuego.push({equipo1, equipo2, resultado1, resultado2})
             }
-
+            
             // Si se encuentra un partido válido, devuélvelo y marca como encontrado
-            if (hora && equipo1 && equipo2) {
-                found = true;
+            if (!found && hora && equipo1 && equipo2) {
+                found = 'proximo';
                 res.json({equipo1, equipo2})
                 return false
             }
         })
+
+        if (found === 'jugando') {
+            res.status(201).json(partidosEnJuego)
+        }
 
         // Si no se encuentra un partido válido, devuelve el último partido inválido
         if (!found) {
